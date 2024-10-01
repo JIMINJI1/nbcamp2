@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>일정 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 전체 화면 높이를 차지하도록 설정 */
+        }
+
+        .container {
+            flex: 1; /* 여유 공간을 차지 */
+        }
+
+        footer {
+            text-align: center; /* 푸터 텍스트 중앙 정렬 */
+            padding: 1rem 0; /* 상하 여백 추가 */
+            margin-top: auto; /* 위쪽 여백 자동 설정 */
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page" href="index.html">홈</a>
+                    <a class="nav-link" href="/login">로그인</a>
+                    <a class="nav-link" href="/signup">회원가입</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <main>
+        <!-- 탭 네비게이션 -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="register-tab" data-toggle="tab" href="#register" role="tab"
+                   aria-controls="register" aria-selected="true">일정 등록</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list"
+                   aria-selected="false">일정 목록</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <!-- 1. 일정 등록 폼 -->
+            <div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab">
+                <br>
+                <h3>일정을 등록하세요 !</h3>
+                <br>
+                <form id="scheduleForm">
+                    <div class="form-group">
+                        <label for="username">작성자명</label>
+                        <input type="text" class="form-control" id="username" placeholder="이름 입력" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password1">비밀번호</label>
+                        <input type="password" class="form-control" id="password1" placeholder="비밀번호 입력" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">비밀번호 확인</label>
+                        <input type="password" class="form-control" id="password2" placeholder="비밀번호 재입력" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contents">일정</label>
+                        <textarea class="form-control" id="contents" placeholder="일정 내용을 입력하세요!  예시) 운동하기"
+                                  required></textarea>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 2. 일정 목록 -->
+            <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+                <br>
+                <h2>등록된 일정 목록</h2>
+                <br>
+                <!-- 검색기능-->
+                <!--                <div class="input-group mb-3">-->
+                <!--                    <input type="text" id="search" placeholder="검색" class="form-control">-->
+                <!--                    <div class="input-group-append">-->
+                <!--                        <button type="button" class="btn btn-primary" style="margin-left: 10px;">조회</button>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+                <div id="scheduleList" class="card-container">
+                    <!-- 전체 일정 목록이 여기에 카드 형식으로 추가됩니다. -->
+                </div>
+            </div>
+
+
+            <!-- 일정 상세보기 모달 -->
+            <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="scheduleModalLabel">일정 상세보기</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>작성일: <span id="modalUpdateDate"></span></h5>
+                            <h6>작성자: <span id="modalUsername"></span></h6>
+                            <p id="modalContent"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+</div>
+
+
+<!-- footer -->
+<footer>
+    <p>&copy; 2024 일정 관리 앱</p>
+</footer>
+
+<!-- js -->
+<script>
+    $(document).ready(function () {
+        //  1. 일정 등록
+        $('#scheduleForm').on('submit', function (event) {
+            event.preventDefault();
+            const username = $('#username').val();
+            const password1 = $('#password1').val();
+            const password2 = $('#password2').val();
+            const contents = $('#contents').val();
+
+            // 비밀번호 확인
+            if (password1 !== password2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            // POST api/schedule Data 전달
+            let data = {'username': username, 'contents': contents, 'password': password1};
+            $.ajax({
+                type: "POST",
+                url: "/api/schedule",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert("일정이 성공적으로 추가되었습니다!");
+                    loadSchedules(); // 일정 등록 후 일정 목록 다시 로드
+                    $('#scheduleForm').trigger("reset"); // 폼 초기화
+                }
+            });
+        });
+
+        // 2. 일정 전체 조회 기능
+        function loadSchedules() {
+            $.ajax({
+                type: "GET",
+                url: "/api/schedule",
+                contentType: "application/json",
+                success: function (response) {
+                    $('#scheduleList').empty(); // 기존 목록 초기화
+                    response.forEach(function (schedule) {
+                        $('#scheduleList').append(`
+                        <div class="card mb-3" data-id="${schedule.scheduleId}">
+                            <div class="card-body">
+                                <h5 class="card-title">작성일: ${schedule.updateDate}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">작성자: ${schedule.username} 님</h6>
+                                <p class="card-text schedule-content">${schedule.contents}</p>
+                                <button class="btn btn-warning btn-sm edit-btn">수정</button>
+                                <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+                                <button class="btn btn-info btn-sm detail-btn">상세</button>
+                            </div>
+                        </div>
+                    `);
+                    });
+                }
+            });
+        }
+
+        // 페이지가 로드될 때 일정 목록을 가져옴
+        loadSchedules();
+
+
+        // 일정 상세
+        $(document).on('click', '.detail-btn', function (event) {
+            const scheduleId = $(this).closest('.card').data('id'); // 클릭한 카드의 scheduleId 가져오기
+
+            // AJAX 요청으로 상세 정보 가져오기
+            $.ajax({
+                type: "GET",
+                url: `/api/schedule/${scheduleId}`, // scheduleId를 사용하여 자세한 정보 요청
+                contentType: "application/json",
+                success: function (schedule) {
+                    // 상세 정보를 특정 영역에 표시
+                    $('#modalUpdateDate').text(schedule.updateDate);
+                    $('#modalUsername').text(schedule.username);
+                    $('#modalContent').text(schedule.contents);
+
+                    // 모달을 표시
+                    $('#scheduleModal').modal('show');
+                },
+                error: function () {
+                    alert('일정 정보를 가져오는데 실패했습니다.');
+                }
+            });
+        });
+
+
+
+        // 3. 삭제 기능
+        $(document).on('click', '.delete-btn', function () {
+            const scheduleId = $(this).closest('.card').data('id'); // ID 가져오기
+            const password = prompt('비밀번호를 입력하세요:'); // 사용자에게 비밀번호 입력 받기
+
+            if (password) { // 비밀번호가 입력된 경우에만 AJAX 요청
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/schedule/${scheduleId}`,
+                    contentType: "application/json",
+                    data: JSON.stringify({password: password}), // 비밀번호 전송
+                    success: function () {
+                        alert('일정이 삭제되었습니다.');
+                        loadSchedules(); // 삭제 후 목록 다시 로드
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText || '삭제에 실패했습니다.'); // 오류 메시지 처리
+                    }
+                });
+            } else {
+                console.log('비밀번호 입력이 취소되었습니다.'); // 로그 출력
+            }
+        });
+
+        // 4. 수정 기능
+        $(document).on('click', '.edit-btn', function () {
+            const card = $(this).closest('.card');
+            const scheduleId = card.data('id');
+            const currentContent = card.find('.schedule-content').text().trim();
+            const currentUsername = card.find('.card-subtitle').text().replace('작성자: ', '').replace(' 님', '').trim();
+            const currentUpdateDate = card.find('.card-title').text().replace('작성일: ', '').trim(); // 기존 작성일 가져오기
+
+            // 카드 내용 수정
+            card.find('.card-body').html(`
+        <h5 class="card-title">작성일: ${currentUpdateDate}</h5>
+        <input type="text" class="form-control schedule-username-input" value="${currentUsername}" placeholder="작성자" style="margin-bottom: 10px;">
+        <input type="text" class="form-control schedule-edit-input" value="${currentContent}" placeholder="일정 내용" style="margin-bottom: 10px;">
+        <input type="password" class="form-control schedule-password-input" placeholder="비밀번호 입력" style="margin-bottom: 10px;">
+        <button class="btn btn-success btn-sm save-btn">저장</button>
+        <button class="btn btn-secondary btn-sm cancel-btn">취소</button>
+    `);
+            $(this).hide(); // 수정 버튼 숨기기
+            card.data('original-content', currentContent);
+            card.data('original-username', currentUsername);
+        });
+
+
+        // 4. 수정-저장 기능
+        $(document).on('click', '.save-btn', function () {
+            const card = $(this).closest('.card');
+            const scheduleId = card.data('id');
+            const newContent = card.find('.schedule-edit-input').val();
+            const newUsername = card.find('.schedule-username-input').val();
+            const password = card.find('.schedule-password-input').val(); // 비밀번호 입력 값 가져오기
+
+            $.ajax({
+                type: "PUT",
+                url: `/api/schedule/${scheduleId}`,
+                contentType: "application/json",
+                data: JSON.stringify({contents: newContent, username: newUsername, password: password}),
+                success: function () {
+                    alert('일정이 수정되었습니다.');
+                    loadSchedules(); // 수정 후 목록 다시 로드
+                },
+                error: function () {
+                    alert('수정에 실패했습니다. 비밀번호를 확인 해 주세요');
+                }
+            });
+        });
+
+        // 4. 수정-취소 기능
+        $(document).on('click', '.cancel-btn', function () {
+            const card = $(this).closest('.card');
+            const originalContent = card.data('original-content'); // 원래 내용 가져오기
+            const originalUsername = card.data('original-username');
+
+            // 인풋 필드를 다시 텍스트로 변환
+            card.find('.schedule-edit-input').replaceWith(`<p class="card-text schedule-content">${originalContent}</p>`);
+            card.find('.schedule-username-input').replaceWith(`<h6 class="card-subtitle mb-2 text-muted">작성자: ${originalUsername} 님</h6>`);
+            card.find('.schedule-password-input').remove(); // 비밀번호 입력 필드 삭제
+            card.find('.save-btn, .cancel-btn').remove(); // 저장/취소 버튼 삭제
+            card.find('.edit-btn').show(); // 수정 버튼 다시 보이기
+
+            // 수정 삭제 상세 버튼 추가
+            card.find('.card-body').append(`
+        <button class="btn btn-warning btn-sm edit-btn">수정</button>
+        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+         <button class="btn btn-info btn-sm detail-btn">상세</button>
+    `);
+
+        });
+    });
+</script>
+
+
+<!-- 목록 탭 script-->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
