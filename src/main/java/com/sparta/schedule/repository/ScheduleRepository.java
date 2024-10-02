@@ -78,9 +78,9 @@ public class ScheduleRepository {
                 // SQL의 결과로 받아온 Schedule 데이터들을 ScheduleResponseDto 타입으로 변환
                 int scheduleId = rs.getInt("schedule_id");  // 일정 ID
                 String contents = rs.getString("contents");  // 일정 내용
-                String user = rs.getString("username");      // 사용자 이름
+                String username = rs.getString("username");      // 사용자 이름
                 Date createDate = rs.getDate("create_date"); // 작성일
-                return new ScheduleResponseDto(scheduleId, contents, user, createDate);
+                return new ScheduleResponseDto(scheduleId, contents, username, createDate);
             }
         });
     }
