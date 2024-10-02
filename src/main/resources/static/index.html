@@ -18,6 +18,11 @@
             flex: 1; /* 여유 공간을 차지 */
         }
 
+        /*검색창*/
+        .input-group {
+            max-width: 400px; /* 원하는 길이로 조정 */
+        }
+
         footer {
             text-align: center; /* 푸터 텍스트 중앙 정렬 */
             padding: 1rem 0; /* 상하 여백 추가 */
@@ -97,12 +102,12 @@
                 <h2>등록된 일정 목록</h2>
                 <br>
                 <!-- 검색기능-->
-                <!--                <div class="input-group mb-3">-->
-                <!--                    <input type="text" id="search" placeholder="검색" class="form-control">-->
-                <!--                    <div class="input-group-append">-->
-                <!--                        <button type="button" class="btn btn-primary" style="margin-left: 10px;">조회</button>-->
-                <!--                    </div>-->
-                <!--                </div>-->
+                <div class="input-group mb-3">
+                    <input type="text" id="search" placeholder="조회하려는 작성자명을 입력해 주세요" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" id="searchButton" style="margin-left: 10px;">조회</button>
+                    </div>
+                </div>
 
                 <div id="scheduleList" class="card-container">
                     <!-- 전체 일정 목록이 여기에 카드 형식으로 추가됩니다. -->
@@ -111,7 +116,8 @@
 
 
             <!-- 일정 상세보기 모달 -->
-            <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -121,7 +127,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h5>작성일: <span id="modalUpdateDate"></span></h5>
+                            <h5>작성일: <span id="modalCreateDate"></span></h5>
                             <h6>작성자: <span id="modalUsername"></span></h6>
                             <p id="modalContent"></p>
                         </div>
@@ -176,18 +182,47 @@
         });
 
         // 2. 일정 전체 조회 기능
-        function loadSchedules() {
+        // function loadSchedules() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/api/schedule?username=",
+        //         contentType: "application/json",
+        //         success: function (response) {
+        //             $('#scheduleList').empty(); // 기존 목록 초기화
+        //             response.forEach(function (schedule) {
+        //                 $('#scheduleList').append(`
+        //                 <div class="card mb-3" data-id="${schedule.scheduleId}">
+        //                     <div class="card-body">
+        //                         <h5 class="card-title">작성일: ${schedule.updateDate}</h5>
+        //                         <h6 class="card-subtitle mb-2 text-muted">작성자: ${schedule.username} 님</h6>
+        //                         <p class="card-text schedule-content">${schedule.contents}</p>
+        //                         <button class="btn btn-warning btn-sm edit-btn">수정</button>
+        //                         <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+        //                         <button class="btn btn-info btn-sm detail-btn">상세</button>
+        //                     </div>
+        //                 </div>
+        //             `);
+        //             });
+        //         }
+        //     });
+        // }
+
+        // 2. 일정 - 작성자명으로 조회
+        function loadSchedules(username) {
             $.ajax({
                 type: "GET",
-                url: "/api/schedule",
+                url: `/api/schedule?username=${encodeURIComponent(username)}`, // 템플릿 리터럴 사용
                 contentType: "application/json",
                 success: function (response) {
                     $('#scheduleList').empty(); // 기존 목록 초기화
-                    response.forEach(function (schedule) {
-                        $('#scheduleList').append(`
+                    if (response.length === 0) {
+                        $('#scheduleList').append('<p>조회된 일정이 없습니다.</p>'); // 결과가 없을 때 메시지 표시
+                    } else {
+                        response.forEach(function (schedule) {
+                            $('#scheduleList').append(`
                         <div class="card mb-3" data-id="${schedule.scheduleId}">
                             <div class="card-body">
-                                <h5 class="card-title">작성일: ${schedule.updateDate}</h5>
+                                <h5 class="card-title">작성일: ${schedule.createDate}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">작성자: ${schedule.username} 님</h6>
                                 <p class="card-text schedule-content">${schedule.contents}</p>
                                 <button class="btn btn-warning btn-sm edit-btn">수정</button>
@@ -196,16 +231,27 @@
                             </div>
                         </div>
                     `);
-                    });
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("일정 조회 오류:", error);
                 }
             });
         }
 
+        // 버튼 클릭 시 검색어를 가져와서 일정 조회
+        $('#searchButton').click(function () {
+            const username = $('#search').val(); // 사용자 입력
+            loadSchedules(username); // 일정 조회
+        });
+
+
         // 페이지가 로드될 때 일정 목록을 가져옴
-        loadSchedules();
+        // loadSchedules();
 
 
-        // 일정 상세
+        // 2. 일정 조회 - 상세
         $(document).on('click', '.detail-btn', function (event) {
             const scheduleId = $(this).closest('.card').data('id'); // 클릭한 카드의 scheduleId 가져오기
 
@@ -216,7 +262,7 @@
                 contentType: "application/json",
                 success: function (schedule) {
                     // 상세 정보를 특정 영역에 표시
-                    $('#modalUpdateDate').text(schedule.updateDate);
+                    $('#modalCreateDate').text(schedule.createDate);
                     $('#modalUsername').text(schedule.username);
                     $('#modalContent').text(schedule.contents);
 
@@ -228,7 +274,6 @@
                 }
             });
         });
-
 
 
         // 3. 삭제 기능
@@ -261,11 +306,11 @@
             const scheduleId = card.data('id');
             const currentContent = card.find('.schedule-content').text().trim();
             const currentUsername = card.find('.card-subtitle').text().replace('작성자: ', '').replace(' 님', '').trim();
-            const currentUpdateDate = card.find('.card-title').text().replace('작성일: ', '').trim(); // 기존 작성일 가져오기
+            const currentCreateDate = card.find('.card-title').text().replace('작성일: ', '').trim(); // 기존 작성일 가져오기
 
             // 카드 내용 수정
             card.find('.card-body').html(`
-        <h5 class="card-title">작성일: ${currentUpdateDate}</h5>
+        <h5 class="card-title">작성일: ${currentCreateDate}</h5>
         <input type="text" class="form-control schedule-username-input" value="${currentUsername}" placeholder="작성자" style="margin-bottom: 10px;">
         <input type="text" class="form-control schedule-edit-input" value="${currentContent}" placeholder="일정 내용" style="margin-bottom: 10px;">
         <input type="password" class="form-control schedule-password-input" placeholder="비밀번호 입력" style="margin-bottom: 10px;">
