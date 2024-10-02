@@ -52,22 +52,40 @@ public class ScheduleRepository {
         return schedule;
     }
 
-    //2. 일정 조회 -전체
-    public List<ScheduleResponseDto> findAll() {
-        String sql = "SELECT * FROM schedule ORDER BY update_date DESC";
+//    //2. 일정 조회 -전체
+//    public List<ScheduleResponseDto> findAll() {
+//        String sql = "SELECT * FROM schedule ORDER BY update_date DESC";
+//
+//        return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
+//            @Override
+//            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
+//                int scheduleId = rs.getInt("schedule_id");  // 일정 ID
+//                String contents = rs.getString("contents");  // 일정 내용
+//                String username = rs.getString("username");  // 사용자 이름
+//                Date  = rs.getDate("create_date"); // 수정일
+//                return new ScheduleResponseDto(scheduleId, contents, username, createDate);
+//            }
+//        });
+//    }
 
-        return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
+    // 2. 일정 조회 - 작성자명으로 검색 조회
+    public List<ScheduleResponseDto> findByUsername(String username) {
+        String sql = "SELECT * FROM schedule WHERE username = ? ORDER BY update_date DESC";
+        return jdbcTemplate.query(sql, new Object[]{username}, new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
+                // SQL의 결과로 받아온 Schedule 데이터들을 ScheduleResponseDto 타입으로 변환
                 int scheduleId = rs.getInt("schedule_id");  // 일정 ID
                 String contents = rs.getString("contents");  // 일정 내용
-                String username = rs.getString("username");  // 사용자 이름
-                Date updateDate = rs.getDate("update_date"); // 수정일
-                return new ScheduleResponseDto(scheduleId, contents, username, updateDate);
+                String user = rs.getString("username");      // 사용자 이름
+                Date createDate = rs.getDate("create_date"); // 작성일
+                return new ScheduleResponseDto(scheduleId, contents, user, createDate);
             }
         });
     }
+
+
 
     // 2. 일정 조회 - 개별
     public ScheduleResponseDto findDetail(int scheduleId) {
@@ -76,10 +94,10 @@ public class ScheduleRepository {
             int id = rs.getInt("schedule_id");
             String contents = rs.getString("contents");
             String username = rs.getString("username");
-            Date updateDate = rs.getDate("update_date");
+            Date createDate = rs.getDate("create_date");
 
             // ScheduleResponseDto 객체를 반환
-            return new ScheduleResponseDto(scheduleId, contents, username, updateDate);
+            return new ScheduleResponseDto(scheduleId, contents, username, createDate);
         });
     }
 

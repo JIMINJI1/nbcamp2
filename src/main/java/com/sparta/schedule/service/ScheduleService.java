@@ -30,10 +30,15 @@ public class ScheduleService {
         return scheduleResponseDto;
     }
 
-    // 2. 일정 조회하기 - 전체
-    public List<ScheduleResponseDto> getAllSchedules() {
-        //DB 모든 일정 조회
-        return scheduleRepository.findAll();
+//    // 2. 일정 조회하기 - 전체
+//    public List<ScheduleResponseDto> getAllSchedules() {
+//        //DB 모든 일정 조회
+//        return scheduleRepository.findAll();
+//    }
+
+    // 2. 일정 조회하기 - 작성자명
+    public List<ScheduleResponseDto> getScheduleByUsername(String username) {
+        return scheduleRepository.findByUsername(username);
     }
 
     //2. 일정 조회하기 - 상세

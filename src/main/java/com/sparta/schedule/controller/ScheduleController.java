@@ -31,9 +31,15 @@ public class ScheduleController {
     }
 
     // 일정 조회 - 전체
+//    @GetMapping("/schedule")
+//    public List<ScheduleResponseDto> getAllSchedules() {
+//        return scheduleService.getAllSchedules();
+//    }
+
+    // 일정조회 - 작성자명
     @GetMapping("/schedule")
-    public List<ScheduleResponseDto> getAllSchedules() {
-        return scheduleService.getAllSchedules();
+    public List<ScheduleResponseDto> getScheduleByUsername(@RequestParam String username) {
+        return scheduleService.getScheduleByUsername(username);
     }
 
     //일정 조회 - 상세
