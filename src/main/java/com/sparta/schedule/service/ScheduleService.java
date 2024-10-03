@@ -10,10 +10,10 @@ import java.util.List;
 
 @Service
 public class ScheduleService {
-    //
+    //ScheduleRepository 타입의 의존성을 주입받기 위한 필드 선언
     private final ScheduleRepository scheduleRepository;
 
-    //
+    // 생성자 주입을 통해 ScheduleRepository 객체를 초기화
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }

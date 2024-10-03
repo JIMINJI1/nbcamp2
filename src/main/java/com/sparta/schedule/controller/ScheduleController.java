@@ -15,13 +15,11 @@ import java.util.List;
 public class ScheduleController {
     // ScheduleService 타입의 의존성을 주입받기 위한 필드 선언
     private final ScheduleService scheduleService;
-    private final ScheduleRepository scheduleRepository;
 
     // 생성자 주입을 통해 ScheduleService 객체를 초기화
-    public ScheduleController(ScheduleService scheduleService, ScheduleRepository scheduleRepository) {
+    public ScheduleController(ScheduleService scheduleService) {
         // ScheduleService 객체를 클래스의 필드에 할당
         this.scheduleService = scheduleService;
-        this.scheduleRepository = scheduleRepository;
     }
 
     //1. 일정 등록

@@ -80,7 +80,8 @@ public class ScheduleRepository {
                 String contents = rs.getString("contents");  // 일정 내용
                 String username = rs.getString("username");      // 사용자 이름
                 Date createDate = rs.getDate("create_date"); // 작성일
-                return new ScheduleResponseDto(scheduleId, contents, username, createDate);
+                Date updateDate = rs.getDate("update_date"); // 수정일
+                return new ScheduleResponseDto(scheduleId, contents, username, createDate,updateDate);
             }
         });
     }
@@ -95,9 +96,10 @@ public class ScheduleRepository {
             String contents = rs.getString("contents");
             String username = rs.getString("username");
             Date createDate = rs.getDate("create_date");
+            Date updateDate = rs.getDate("update_date");
 
             // ScheduleResponseDto 객체를 반환
-            return new ScheduleResponseDto(scheduleId, contents, username, createDate);
+            return new ScheduleResponseDto(scheduleId, contents, username, createDate,updateDate);
         });
     }
 
