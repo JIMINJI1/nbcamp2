@@ -25,7 +25,8 @@
 : 등록된 일정을 삭제할 수 있습니다. 비밀번호 확인 후 삭제가 가능합니다.
 
 ## 🔗 API 설계
-![image](https://github.com/user-attachments/assets/461f9e8f-2d65-4fd2-91d9-9f4657923456)
+![image](https://github.com/user-attachments/assets/a3379155-e1cc-463b-b4c5-a3cdf1da0366)
+
 
 
 
