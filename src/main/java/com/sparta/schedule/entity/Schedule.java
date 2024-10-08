@@ -1,10 +1,10 @@
 package com.sparta.schedule.entity;
 
-import com.sparta.schedule.dto.ScheduleRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.sql.Date;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -12,18 +12,17 @@ import java.sql.Date;
 
     // 기본 생성자
     public class Schedule {
-        private int scheduleId;
+        private Long scheduleId;
         private String contents;
         private String username;
         private String password;
-        private Date createDate;
-        private Date updateDate;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
-       //DTO를 사용하는 생성자
-        public Schedule(ScheduleRequestDto requestDto) {
-            this.contents = requestDto.getContents();
-            this.username = requestDto.getUsername();
-            this.password = requestDto.getPassword();
+        public Schedule(String contents,  String username,  String password) {
+            this.contents = contents;
+            this.username = username;
+            this.password = password;
         }
 
 }
