@@ -224,8 +224,8 @@
                             $('#scheduleList').append(`
                         <div class="card mb-3" data-id="${schedule.scheduleId}">
                             <div class="card-body">
-                                <h5 class="card-title">작성일: ${schedule.createDate}</h5>
-                                <h5 class="card-title">수정일: ${schedule.updateDate}</h5>
+                                <h5 class="card-title">작성일: ${schedule.createdAt}</h5>
+                                <h5 class="card-title">수정일: ${schedule.updatedAt}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">작성자: ${schedule.username} 님</h6>
                                 <p class="card-text schedule-content">${schedule.contents}</p>
                                 <button class="btn btn-warning btn-sm edit-btn">수정</button>
@@ -265,8 +265,8 @@
                 contentType: "application/json",
                 success: function (schedule) {
                     // 상세 정보를 특정 영역에 표시
-                    $('#modalCreateDate').text(schedule.createDate);
-                    $('#modalUpdateDate').text(schedule.updateDate);
+                    $('#modalCreateDate').text(schedule.createdAt);
+                    $('#modalUpdateDate').text(schedule.updatedAt);
                     $('#modalUsername').text(schedule.username);
                     $('#modalContent').text(schedule.contents);
 
