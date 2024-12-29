@@ -1,0 +1,13 @@
+
+src/main/resources/application.yml
+src/main/resources/application-dev.yml
+src/test/resources/application-test.yml
+
+docker-compose.yml
+.dockerignore
+Dockerfile
+.gitignore
+.git
+node_modules/
+*.log
+*.md
