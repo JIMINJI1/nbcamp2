@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     // Docker 이미지 빌드 (latest 태그)
-                    def image = docker.build('usermin123/schedule:latest')
+                    def image = docker.build('usermin123/schedule')
                 }
             }
         }
