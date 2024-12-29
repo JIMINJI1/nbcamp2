@@ -7,7 +7,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {`
+            steps {
                 // Git에서 main 브랜치를 체크아웃
                 git branch: 'main', url: 'https://github.com/JIMINJI1/nbcamp2.git'
             }
