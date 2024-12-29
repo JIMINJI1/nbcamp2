@@ -1,10 +1,6 @@
 pipeline {
     agent any  // 모든 에이전트에서 실행
 
-    tools {
-        jdk 'JDK 17'  // Jenkins에서 설정된 실제 JDK 이름으로 변경
-    }
-
     stages {
         stage('Checkout') {
             steps {
