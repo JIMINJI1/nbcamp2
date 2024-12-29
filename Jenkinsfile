@@ -2,7 +2,7 @@ pipeline {
     agent any  // 모든 에이전트에서 실행
 
     tools {
-        jdk 'JDK'  // 사용할 JDK 설정
+        jdk 'JDK 17'  // Jenkins에서 설정된 실제 JDK 이름으로 변경
     }
 
     stages {
@@ -22,7 +22,7 @@ pipeline {
 
         stage('Build and Test') {
             steps {
-            //    Gradle 빌드 실행 (테스트 제외)
+                // Gradle 빌드 실행 (테스트 제외)
                 sh '''
                 ./gradlew clean build --info --stacktrace
                 '''
@@ -47,18 +47,20 @@ pipeline {
                         docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-jenkins') {
                              sh '''
                                  docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD  // Docker Hub 로그인
-                                 docker push rlarkddnr1686/evertrip-image:latest  // 이미지 푸시
+                                 docker push usermin123/schedule:latest  // 이미지 푸시
                                 '''
                         }
                     }
                 }
             }
         }
-    }
 
-    stage('Deploy') {
-            echo "Deploy is not yet implemented"
+        stage('Deploy') {
+            steps {
+                echo "Deploy is not yet implemented"
+            }
         }
+    }
 
     post {
         success {
@@ -70,5 +72,4 @@ pipeline {
             echo 'Pipeline failed!!'
         }
     }
-
 }
