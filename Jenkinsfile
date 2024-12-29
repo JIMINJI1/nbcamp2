@@ -1,9 +1,7 @@
 pipeline {
-    agent any  // 모든 에이전트에서 실행
-
-   agent {
-           docker { image 'docker:latest' }
-       }
+    agent {
+        docker { image 'docker:latest' }
+    }
 
     stages {
         stage('Checkout') {
@@ -45,10 +43,10 @@ pipeline {
                     script {
                         // Docker Hub에 로그인하고 이미지를 푸시
                         docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-jenkins') {
-                             sh '''
-                                 docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD  // Docker Hub 로그인
-                                 docker push usermin123/schedule:latest  // 이미지 푸시
-                                '''
+                            sh '''
+                            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+                            docker push usermin123/schedule:latest
+                            '''
                         }
                     }
                 }
